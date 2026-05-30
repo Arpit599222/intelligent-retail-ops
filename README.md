@@ -22,7 +22,7 @@ graph TD
 
     User((User / Device)) -->|HTTPS Requests| CloudRun[Google Cloud Run]
     
-    subgraph CloudRun[Google Cloud Run Environment]
+    subgraph CloudRun [Google Cloud Run Environment]
         UI[React + Vite Frontend]:::frontend
         API[Express.js Node Backend]:::backend
         
@@ -31,7 +31,7 @@ graph TD
     
     API -->|Databricks SQL Driver| Databricks[(Databricks Lakehouse)]:::db
 
-    subgraph Databricks[(Databricks Data Intelligence Platform)]
+    subgraph Databricks [Databricks Data Intelligence Platform]
         DB_Identity[Identity Management Schema]
         DB_Logistics[Logistics OS Schema]
     end
