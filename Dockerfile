@@ -1,5 +1,5 @@
 # Stage 1: Build the Vite frontend and compile TS server
-FROM node:20-alpine AS builder
+FROM node:20 AS builder
 
 WORKDIR /app
 
@@ -15,7 +15,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Production environment
-FROM node:20-alpine
+FROM node:20-slim
 
 WORKDIR /app
 
@@ -26,15 +26,8 @@ RUN npm ci --omit=dev
 # Copy compiled frontend assets
 COPY --from=builder /app/dist ./dist
 
-# Copy compiled server code (if tsc outputs to a directory, typically dist or server/dist depending on tsconfig)
-# Wait, let's verify where `tsc -p tsconfig.json` outputs the files.
-# If we run the server using tsx locally, maybe we can run it with tsx in prod or pre-compile it.
-# To be safe, we'll install tsx in prod stage or copy the entire server folder and run it with tsx.
-# Since tsconfig.json might not output to a specific folder, let's just run it with tsx for simplicity and reliability without changing their build process heavily.
-
-# Let's adjust this: copy everything we need to run it via tsx
+# Copy compiled server code
 COPY --from=builder /app/server ./server
-COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package.json ./package.json
 
 # Install tsx
