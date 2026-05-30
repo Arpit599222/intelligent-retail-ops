@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Intelligent Retail Operations Platform
 
-## Getting Started
+A modern, enterprise-grade SaaS platform designed for real-time retail operations, inventory management, logistics synchronization, and workforce attendance tracking.
 
-First, run the development server:
+## 🚀 Live Demo
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+**[Intelligent Retail Operations Platform](https://intelligent-retail-572455089707.us-central1.run.app/login)**
+
+---
+
+## 🏗️ Architecture & Data Flow
+
+The application follows a decoupled client-server architecture, built for scalability and high performance, with a Databricks Lakehouse backend serving as the centralized source of truth.
+
+```mermaid
+graph TD
+    %% Define Styles
+    classDef frontend fill:#3b82f6,stroke:#1d4ed8,stroke-width:2px,color:#fff
+    classDef backend fill:#10b981,stroke:#047857,stroke-width:2px,color:#fff
+    classDef db fill:#f59e0b,stroke:#b45309,stroke-width:2px,color:#fff
+    classDef cloud fill:#6366f1,stroke:#4338ca,stroke-width:2px,color:#fff
+
+    User((User / Device)) -->|HTTPS Requests| CloudRun[Google Cloud Run]
+    
+    subgraph CloudRun[Google Cloud Run Environment]
+        UI[React + Vite Frontend]:::frontend
+        API[Express.js Node Backend]:::backend
+        
+        UI -->|REST API calls| API
+    end
+    
+    API -->|Databricks SQL Driver| Databricks[(Databricks Lakehouse)]:::db
+
+    subgraph Databricks[(Databricks Data Intelligence Platform)]
+        DB_Identity[Identity Management Schema]
+        DB_Logistics[Logistics OS Schema]
+    end
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Tech Stack & Tools
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Frontend
+* **React 19** - Modern component-based UI library
+* **Vite** - Lightning-fast frontend build tool
+* **Tailwind CSS (v4)** - Utility-first CSS framework for custom, premium styling
+* **Zustand** - Lightweight global state management
+* **Lucide React** - Clean and consistent iconography
+* **Recharts & Leaflet** - Data visualization and geographical mapping
 
-## Learn More
+### Backend
+* **Node.js (v20)** - High-performance JavaScript runtime
+* **Express.js** - Minimal and flexible web application framework
+* **Databricks SQL Driver** - Native integration for Databricks SQL warehouses
+* **Bcrypt & JSONWebToken** - Secure password hashing and stateless authentication
 
-To learn more about Next.js, take a look at the following resources:
+### Infrastructure & DevOps
+* **Google Cloud Run** - Fully managed serverless execution environment
+* **Docker** - Multi-stage containerization using Node.js base images for optimized footprints
+* **Cloud Run MCP Server** - Context-aware agentic deployments and configuration management
+* **Databricks** - Cloud-based data engineering and warehousing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## ⚙️ Features
 
-## Deploy on Vercel
+1. **Role-Based Access Control (RBAC):** Secure access tiers for Super Admins, Store Managers, Inventory Handlers, and Delivery Staff.
+2. **Real-time Inventory Tracking:** Centralized oversight of stock levels across multiple geographical store locations.
+3. **Logistics & Transfer Management:** End-to-end tracking of intra-store stock transfers, complete with mapping.
+4. **Workforce Attendance:** Live worker tracking, shift management, and digital clock-in/out integration.
+5. **Analytics Dashboards:** High-level executive views aggregating system uptime, workforce metrics, and stock alerts.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 💻 Local Development
+
+### Prerequisites
+- Node.js (v20+)
+- A Databricks Workspace & SQL Warehouse
+- Personal Access Token for Databricks
+
+### Setup
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Arpit599222/intelligent-retail-ops.git
+   cd intelligent-retail-ops
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Configure Environment Variables:**
+   Create a `.env` file in the root directory:
+   ```env
+   DATABRICKS_HOST=your-workspace.cloud.databricks.com
+   DATABRICKS_SERVER_HOSTNAME=your-workspace.cloud.databricks.com
+   DATABRICKS_HTTP_PATH=/sql/1.0/warehouses/your-warehouse-id
+   DATABRICKS_TOKEN=your-personal-access-token
+   DATABRICKS_CATALOG=logistics_os
+   DATABRICKS_SCHEMA=identity_management
+   PORT=8080
+   ```
+
+4. **Run the application locally:**
+   ```bash
+   npm run dev:all
+   ```
+
+5. **Build for production:**
+   ```bash
+   npm run build
+   ```
